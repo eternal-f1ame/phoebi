@@ -1,0 +1,178 @@
+.matrix {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 18px;
+  align-items: start;
+  padding: 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+/* lets the column shrink below the matrix's phone min-width, so the matrix scrolls in its box */
+.main {
+  min-width: 0;
+}
+
+.switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--rule);
+  border-radius: 9px;
+  background: var(--paper);
+}
+
+.switch button {
+  padding: 0.38em 0.9em;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink-2);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.84rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.switch button.active {
+  background: var(--violet);
+  color: #fff;
+}
+
+.legend {
+  margin: 8px 0 6px;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.grid {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.groupLabel {
+  fill: var(--ink-2);
+  font-size: 11px;
+  text-anchor: middle;
+}
+
+.rowLabel {
+  fill: var(--ink-2);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 11px;
+  text-anchor: end;
+}
+
+.scroller {
+  overflow-x: auto;
+}
+
+.column {
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.band {
+  fill: transparent;
+}
+
+.column:hover .band {
+  fill: #efeaf7;
+}
+
+.current .band {
+  fill: #e4dcf1;
+  stroke: #b7a6d6;
+  stroke-width: 1;
+}
+
+.column:focus-visible .band {
+  fill: #e4dcf1;
+  stroke: var(--violet);
+  stroke-width: 2;
+}
+
+.present {
+  fill: var(--violet);
+  transition: fill 0.45s ease;
+}
+
+.absent {
+  fill: var(--white);
+  stroke: var(--rule);
+}
+
+/* leave-combinations-out: the nine held-out columns lift out and take the safranin tone */
+.lco .heldOut {
+  transform: translateY(-9px);
+}
+
+.heldOut .present {
+  fill: var(--safranin);
+}
+
+/* tall enough for the longest entry (all six species), so hovering never moves the page */
+.info {
+  min-height: 212px;
+  text-align: center;
+}
+
+.thumb {
+  width: 88px;
+  margin: 0 auto 8px;
+  padding: 4px;
+}
+
+.combo {
+  margin: 0;
+  color: var(--ink-2);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+}
+
+.species {
+  margin: 1px 0 4px;
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 0.84rem;
+  line-height: 1.4;
+}
+
+.role {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.hint {
+  margin: 70px 0 0;
+  color: var(--ink-2);
+  font-size: 0.84rem;
+}
+
+/* below a full-width page the info panel moves under the matrix, which keeps its full width */
+@media (max-width: 980px) {
+  .matrix {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .info {
+    min-height: 0;
+  }
+  .hint {
+    margin: 8px 0 0;
+  }
+}
+
+@media (max-width: 760px) {
+  .grid {
+    min-width: 680px;
+  }
+  .switch button {
+    font-size: 0.8rem;
+  }
+}

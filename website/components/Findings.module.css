@@ -1,0 +1,45 @@
+/* Side by side, the columns differ in width so that the three findings end at the same height:
+   each gets a one-line title and five lines of text. The ratio sits in the middle of the range
+   that does this at the full 952 px column (1.45 to 1.6 : 1 : 0.85 to 1); narrower windows stack
+   the findings instead. A change to the findings' text needs the ratio re-measured. */
+.list {
+  list-style: none;
+  margin: 14px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1.52fr) minmax(0, 1fr) minmax(0, 0.93fr);
+  gap: 28px;
+}
+
+.list li {
+  padding-top: 12px;
+  border-top: 1px solid var(--rule);
+}
+
+.number {
+  display: block;
+  color: var(--violet);
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.list h3 {
+  margin-bottom: 6px;
+}
+
+.list p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 999px) {
+  .list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+}

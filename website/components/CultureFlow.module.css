@@ -1,0 +1,160 @@
+.flow {
+  margin-top: 16px;
+}
+
+.diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.track {
+  stroke: var(--rule);
+  stroke-width: 2;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+}
+
+.ring {
+  fill: var(--white);
+  stroke: var(--rule);
+  stroke-width: 1.5;
+}
+
+.icon {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.icon text {
+  fill: var(--ink-2);
+  stroke: none;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 8px;
+}
+
+.liquid {
+  fill: rgba(75, 46, 131, 0.16);
+  stroke: none;
+}
+
+.accent {
+  stroke: var(--violet);
+}
+
+.dotA {
+  fill: var(--violet);
+  stroke: none;
+}
+
+.dotB {
+  fill: var(--safranin);
+  stroke: none;
+}
+
+.cover {
+  fill: rgba(75, 46, 131, 0.1);
+  stroke: var(--violet);
+}
+
+.rod {
+  fill: var(--ink-2);
+  stroke: none;
+}
+
+/* the dot travels the track in 7 s (6 s moving, 1 s pause); each ring lights as it passes */
+.traveller {
+  fill: var(--violet);
+  offset-path: path("M80 50 H880");
+  offset-distance: 0%;
+  opacity: 0;
+  animation: travel 7s linear infinite paused;
+}
+
+.ring {
+  animation: light 7s ease-out infinite paused;
+  animation-delay: calc(var(--i) * 1.2s);
+}
+
+.play .traveller,
+.play .ring {
+  animation-play-state: running;
+}
+
+@keyframes travel {
+  0% {
+    offset-distance: 0%;
+    opacity: 1;
+  }
+  86% {
+    offset-distance: 100%;
+    opacity: 1;
+  }
+  93%,
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes light {
+  0% {
+    stroke: var(--violet);
+    stroke-width: 2.5;
+  }
+  12%,
+  100% {
+    stroke: var(--rule);
+    stroke-width: 1.5;
+  }
+}
+
+.captions {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.step {
+  display: block;
+  color: var(--violet);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.captions h3 {
+  margin: 1px 0 3px;
+  font-size: 0.95rem;
+}
+
+.captions p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.scroller {
+  overflow-x: auto;
+}
+
+@media (max-width: 860px) {
+  .captions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .diagram {
+    min-width: 600px;
+  }
+}

@@ -1,0 +1,65 @@
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 22px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.5em 0.95em;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+}
+
+a.button:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+.primary {
+  border-color: var(--violet);
+  background: var(--violet);
+  color: #fff;
+}
+
+a.primary:hover {
+  background: var(--violet-2);
+  border-color: var(--violet-2);
+  color: #fff;
+}
+
+.icon {
+  width: 1.1em;
+  height: 1.1em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.disabled {
+  background: transparent;
+  border-style: dashed;
+  color: var(--ink-2);
+  cursor: not-allowed;
+}
+
+.soon {
+  margin-left: 0.2em;
+  padding-left: 0.6em;
+  border-left: 1px solid var(--rule);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

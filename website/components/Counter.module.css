@@ -1,0 +1,19 @@
+/* On screen the counting copy is drawn and the real value is kept for screen readers. Print
+   draws the real value, since a page printed before it was scrolled would show zeros. */
+@media screen {
+  .final {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+}
+
+@media print {
+  .counting {
+    display: none;
+  }
+}

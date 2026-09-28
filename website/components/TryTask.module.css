@@ -1,0 +1,190 @@
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 250px) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.viewer {
+  padding: 11px;
+  animation: settle 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.label {
+  margin: 0 0 10px;
+  color: var(--ink-2);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.toggles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.toggle {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 11px;
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  background: var(--white);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.toggle:hover:not(:disabled) {
+  border-color: var(--violet);
+}
+
+.toggle:disabled {
+  cursor: default;
+}
+
+.toggle em {
+  font-family: var(--font-serif), Georgia, serif;
+}
+
+.code {
+  color: var(--ink-2);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.8rem;
+}
+
+.on {
+  border-color: var(--violet);
+  background: #f1edf9;
+}
+
+/* after checking: right picks, missed species and wrong picks */
+.hit {
+  border-color: var(--violet);
+  background: #f1edf9;
+}
+
+.missed {
+  border-style: dashed;
+  border-color: var(--violet);
+}
+
+.wrong {
+  border-color: var(--safranin);
+  background: #fbeff2;
+}
+
+.mark {
+  margin-left: auto;
+  color: var(--violet);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.markAbsent {
+  color: var(--ink-2);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.primary,
+.secondary {
+  padding: 0.5em 1em;
+  border-radius: 8px;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary {
+  border: 1px solid var(--violet);
+  background: var(--violet);
+  color: #fff;
+}
+
+.primary[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.secondary {
+  border: 1px solid var(--rule);
+  background: var(--white);
+  color: var(--ink);
+}
+
+.secondary:hover {
+  border-color: var(--violet);
+  color: var(--violet);
+}
+
+.tally {
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+.result {
+  min-height: 5.5em;
+  margin-top: 12px;
+  font-size: 0.92rem;
+}
+
+.result p {
+  margin: 0 0 6px;
+}
+
+.score {
+  font-family: var(--font-serif), Georgia, serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.note {
+  color: var(--ink-2);
+  font-size: 0.85rem;
+}
+
+/* two columns of species only where a name and its verdict fit on one line */
+@media (max-width: 900px) {
+  .toggles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+  .viewer {
+    max-width: 280px;
+    margin: 0 auto;
+  }
+}

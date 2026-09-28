@@ -1,0 +1,88 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* the micrograph beside its reference data, so all six fit one screen */
+.card {
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: 14px;
+  align-items: center;
+  padding: 14px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.view {
+  width: 104px;
+  padding: 4px;
+}
+
+.code {
+  margin: 0 0 1px;
+  color: var(--ink-2);
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
+.name {
+  margin: 0 0 6px;
+  font-size: 0.98rem;
+  font-weight: 500;
+}
+
+.facts {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.facts div {
+  display: grid;
+  grid-template-columns: 4.8em minmax(0, 1fr);
+  gap: 6px;
+  padding: 2px 0;
+  border-top: 1px solid var(--rule);
+}
+
+.facts dt {
+  color: var(--ink-2);
+}
+
+.facts dd {
+  margin: 0;
+}
+
+.dot {
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  margin-right: 0.45em;
+  border-radius: 50%;
+  vertical-align: 0.02em;
+}
+
+.positive {
+  background: var(--violet);
+}
+
+.negative {
+  background: var(--safranin);
+}
+
+@media (max-width: 940px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

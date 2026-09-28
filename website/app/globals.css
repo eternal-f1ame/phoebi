@@ -1,0 +1,154 @@
+/* A restrained academic page: warm paper, near-black ink, one accent (crystal violet, the
+   Gram stain's primary dye). Text uses only ink, ink-2 or violet. Safranin, the counterstain, is
+   the one contrast colour and never colours text: the dot that marks a Gram-negative species, the
+   held-out combinations, a wrong pick in the quiz and the method diagram's decision threshold. */
+:root {
+  --paper: #fbfaf6;
+  --paper-2: #f3f0e8;
+  --white: #ffffff;
+  --ink: #1c1b22;
+  --ink-2: #4a4854;
+  --rule: #e2ded3;
+  --violet: #4b2e83;
+  --violet-2: #36205f;
+  --safranin: #b83b5e;
+  --radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* A compact scale (15 px at the browser's default text size) so that the header and each section
+   fit a laptop window whole. A percentage keeps a reader's own text-size setting in force. */
+html {
+  font-size: 93.75%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0 0 0.5em;
+  text-wrap: balance;
+}
+
+h2 {
+  font-size: clamp(1.35rem, 2.2vw, 1.6rem);
+}
+
+h3 {
+  font-size: 1rem;
+}
+
+/* text runs the full column; "pretty" keeps a single word from ending a paragraph alone */
+p {
+  margin: 0 0 1em;
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--violet);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--violet-2);
+}
+
+:focus-visible {
+  outline: 2px solid var(--violet);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+code,
+pre {
+  font-family: var(--font-mono), ui-monospace, monospace;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  padding: 34px 0;
+  border-top: 1px solid var(--rule);
+  scroll-margin-top: 12px;
+}
+
+.lead {
+  color: var(--ink-2);
+}
+
+/* figures and their numbered captions, as in the paper */
+.figure {
+  margin: 0;
+  padding: 12px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+}
+
+.figure img {
+  width: 100%;
+}
+
+.figure figcaption {
+  margin-top: 8px;
+  color: var(--ink-2);
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.figure-label {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

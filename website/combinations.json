@@ -1,0 +1,387 @@
+[
+ {
+  "code": "bs",
+  "species": [
+   "bs"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs.webp"
+ },
+ {
+  "code": "bt",
+  "species": [
+   "bt"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/bt.webp"
+ },
+ {
+  "code": "fj",
+  "species": [
+   "fj"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/fj.webp"
+ },
+ {
+  "code": "ka",
+  "species": [
+   "ka"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/ka.webp"
+ },
+ {
+  "code": "mx",
+  "species": [
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/mx.webp"
+ },
+ {
+  "code": "pf",
+  "species": [
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/pf.webp"
+ },
+ {
+  "code": "bs_fj",
+  "species": [
+   "bs",
+   "fj"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_fj.webp"
+ },
+ {
+  "code": "bs_ka",
+  "species": [
+   "bs",
+   "ka"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_ka.webp"
+ },
+ {
+  "code": "bs_mx",
+  "species": [
+   "bs",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_mx.webp"
+ },
+ {
+  "code": "bs_pf",
+  "species": [
+   "bs",
+   "pf"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/bs_pf.webp"
+ },
+ {
+  "code": "bt_ka",
+  "species": [
+   "bt",
+   "ka"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_ka.webp"
+ },
+ {
+  "code": "bt_mx",
+  "species": [
+   "bt",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_mx.webp"
+ },
+ {
+  "code": "bt_pf",
+  "species": [
+   "bt",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_pf.webp"
+ },
+ {
+  "code": "ka_fj",
+  "species": [
+   "fj",
+   "ka"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/ka_fj.webp"
+ },
+ {
+  "code": "mx_fj",
+  "species": [
+   "fj",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/mx_fj.webp"
+ },
+ {
+  "code": "fj_pf",
+  "species": [
+   "fj",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/fj_pf.webp"
+ },
+ {
+  "code": "mx_ka",
+  "species": [
+   "ka",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/mx_ka.webp"
+ },
+ {
+  "code": "mx_pf",
+  "species": [
+   "mx",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/mx_pf.webp"
+ },
+ {
+  "code": "bs_bt_mx",
+  "species": [
+   "bs",
+   "bt",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_bt_mx.webp"
+ },
+ {
+  "code": "bs_ka_fj",
+  "species": [
+   "bs",
+   "fj",
+   "ka"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_ka_fj.webp"
+ },
+ {
+  "code": "bs_mx_fj",
+  "species": [
+   "bs",
+   "fj",
+   "mx"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/bs_mx_fj.webp"
+ },
+ {
+  "code": "bs_fj_pf",
+  "species": [
+   "bs",
+   "fj",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_fj_pf.webp"
+ },
+ {
+  "code": "bs_mx_ka",
+  "species": [
+   "bs",
+   "ka",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_mx_ka.webp"
+ },
+ {
+  "code": "bs_ka_pf",
+  "species": [
+   "bs",
+   "ka",
+   "pf"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/bs_ka_pf.webp"
+ },
+ {
+  "code": "bs_mx_pf",
+  "species": [
+   "bs",
+   "mx",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_mx_pf.webp"
+ },
+ {
+  "code": "bt_ka_fj",
+  "species": [
+   "bt",
+   "fj",
+   "ka"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_ka_fj.webp"
+ },
+ {
+  "code": "bt_fj_pf",
+  "species": [
+   "bt",
+   "fj",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_fj_pf.webp"
+ },
+ {
+  "code": "bt_mx_ka",
+  "species": [
+   "bt",
+   "ka",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_mx_ka.webp"
+ },
+ {
+  "code": "bt_mx_pf",
+  "species": [
+   "bt",
+   "mx",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_mx_pf.webp"
+ },
+ {
+  "code": "mx_ka_fj",
+  "species": [
+   "fj",
+   "ka",
+   "mx"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/mx_ka_fj.webp"
+ },
+ {
+  "code": "ka_fj_pf",
+  "species": [
+   "fj",
+   "ka",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/ka_fj_pf.webp"
+ },
+ {
+  "code": "mx_fj_pf",
+  "species": [
+   "fj",
+   "mx",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/mx_fj_pf.webp"
+ },
+ {
+  "code": "mx_ka_pf",
+  "species": [
+   "ka",
+   "mx",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/mx_ka_pf.webp"
+ },
+ {
+  "code": "bs_bt_ka_fj",
+  "species": [
+   "bs",
+   "bt",
+   "fj",
+   "ka"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/bs_bt_ka_fj.webp"
+ },
+ {
+  "code": "bs_ka_fj_pf",
+  "species": [
+   "bs",
+   "fj",
+   "ka",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_ka_fj_pf.webp"
+ },
+ {
+  "code": "bs_mx_fj_pf",
+  "species": [
+   "bs",
+   "fj",
+   "mx",
+   "pf"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/bs_mx_fj_pf.webp"
+ },
+ {
+  "code": "bs_mx_ka_pf",
+  "species": [
+   "bs",
+   "ka",
+   "mx",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bs_mx_ka_pf.webp"
+ },
+ {
+  "code": "bt_mx_ka_fj",
+  "species": [
+   "bt",
+   "fj",
+   "ka",
+   "mx"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_mx_ka_fj.webp"
+ },
+ {
+  "code": "bt_ka_fj_pf",
+  "species": [
+   "bt",
+   "fj",
+   "ka",
+   "pf"
+  ],
+  "heldOut": false,
+  "image": "/img/quiz/bt_ka_fj_pf.webp"
+ },
+ {
+  "code": "bs_bt_mx_ka_fj_pf",
+  "species": [
+   "bs",
+   "bt",
+   "fj",
+   "ka",
+   "mx",
+   "pf"
+  ],
+  "heldOut": true,
+  "image": "/img/quiz/bs_bt_mx_ka_fj_pf.webp"
+ }
+]
