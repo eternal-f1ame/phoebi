@@ -1,0 +1,20 @@
+__pycache__/
+*.py[co]
+*.egg-info/
+.venv/
+venv/
+
+# dataset (tools/fetch_dataset.py) and everything a run writes
+data/
+outputs/
+slurm/logs/*
+!slurm/logs/.gitkeep
+
+# model weights and feature caches, wherever they land
+*.pt
+*.pth
+
+.DS_Store
+.vscode/
+.idea/
+*.swp

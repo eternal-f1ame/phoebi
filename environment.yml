@@ -1,0 +1,21 @@
+name: phoebi
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - torch>=2.4
+      - torchvision
+      - timm>=1.0
+      - numpy
+      - scipy
+      - scikit-learn
+      - pillow
+      - tqdm
+      - matplotlib
+      - pyarrow
+      - huggingface_hub
+      - opencv-python-headless  # tools/augment.py
+      - transformers            # Phikon, in the biomedical encoder probe
+      - open_clip_torch         # BiomedCLIP, in the biomedical encoder probe
