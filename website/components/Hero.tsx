@@ -11,7 +11,9 @@ export default function Hero() {
     <header className={styles.hero}>
       <div className={`container ${styles.grid}`}>
         <div>
-          <p className={styles.venue}>{site.venue}</p>
+          <p className={styles.venue}>
+            <a href={site.venueUrl}>{site.venue}</a>
+          </p>
           <h1 className={styles.title}>
             <span className={styles.name}>{site.short}</span>
             <span className="sr-only">:</span> <span className={styles.subtitle}>{site.subtitle}</span>

@@ -1,20 +1,20 @@
 .blocks {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 22px;
-  margin-top: 8px;
+  gap: 3.3vh;
+  margin-top: 1.2vh;
 }
 
 .blocks h3 {
-  margin-bottom: 8px;
+  margin-bottom: 1.2vh;
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.95rem;
   font-weight: 600;
 }
 
 .code {
-  margin: 0 0 8px;
-  padding: 16px 18px;
+  margin: 0 0 1.2vh;
+  padding: 2.4vh 1.3vw;
   border-radius: var(--radius);
   background: var(--ink);
   color: #f3f0e8;

@@ -1,11 +1,13 @@
 .flow {
-  margin-top: 16px;
+  margin-top: 2.4vh;
 }
 
+/* capped by the window's height, so a wide short window still fits the section */
 .diagram {
   display: block;
   width: 100%;
   height: auto;
+  max-height: 22vh;
   overflow: visible;
 }
 
@@ -115,11 +117,11 @@
 
 .captions {
   list-style: none;
-  margin: 10px 0 0;
+  margin: 1.5vh 0 0;
   padding: 0;
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 16px;
+  gap: 1.2vw;
 }
 
 .step {
@@ -132,7 +134,7 @@
 }
 
 .captions h3 {
-  margin: 1px 0 3px;
+  margin: 0.15vh 0 0.45vh;
   font-size: 0.95rem;
 }
 
@@ -155,6 +157,7 @@
 
 @media (max-width: 760px) {
   .diagram {
-    min-width: 600px;
+    min-width: 40rem;
+    max-height: none;
   }
 }

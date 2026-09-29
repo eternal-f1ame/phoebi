@@ -1,9 +1,9 @@
 .matrix {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 220px;
-  gap: 18px;
+  grid-template-columns: minmax(0, 1fr) 16vw;
+  gap: 1.3vw;
   align-items: start;
-  padding: 14px 16px;
+  padding: 2.1vh 1.2vw;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -16,16 +16,16 @@
 
 .switch {
   display: inline-flex;
-  padding: 3px;
+  padding: 0.2em;
   border: 1px solid var(--rule);
-  border-radius: 9px;
+  border-radius: 0.6rem;
   background: var(--paper);
 }
 
 .switch button {
   padding: 0.38em 0.9em;
   border: 0;
-  border-radius: 6px;
+  border-radius: 0.4rem;
   background: transparent;
   color: var(--ink-2);
   font-family: var(--font-sans), system-ui, sans-serif;
@@ -41,16 +41,18 @@
 }
 
 .legend {
-  margin: 8px 0 6px;
+  margin: 1.2vh 0 0.9vh;
   color: var(--ink-2);
   font-size: 0.85rem;
   line-height: 1.45;
 }
 
+/* capped by the window's height, so the Benchmark section fits a short laptop window */
 .grid {
   display: block;
   width: 100%;
   height: auto;
+  max-height: 27vh;
   overflow: visible;
 }
 
@@ -116,16 +118,17 @@
   fill: var(--safranin);
 }
 
-/* tall enough for the longest entry (all six species), so hovering never moves the page */
+/* tall enough for the longest entry (all six species), so hovering never moves the page; sized in
+   rem because the entry's height is its text's */
 .info {
-  min-height: 212px;
+  min-height: 14.2rem;
   text-align: center;
 }
 
 .thumb {
-  width: 88px;
-  margin: 0 auto 8px;
-  padding: 4px;
+  width: 5.9rem;
+  margin: 0 auto 0.55rem;
+  padding: 0.27rem;
 }
 
 .combo {
@@ -136,7 +139,7 @@
 }
 
 .species {
-  margin: 1px 0 4px;
+  margin: 0.07rem 0 0.27rem;
   font-family: var(--font-serif), Georgia, serif;
   font-size: 0.84rem;
   line-height: 1.4;
@@ -150,7 +153,7 @@
 }
 
 .hint {
-  margin: 70px 0 0;
+  margin: 4.7rem 0 0;
   color: var(--ink-2);
   font-size: 0.84rem;
 }
@@ -164,13 +167,14 @@
     min-height: 0;
   }
   .hint {
-    margin: 8px 0 0;
+    margin: 1.2vh 0 0;
   }
 }
 
 @media (max-width: 760px) {
   .grid {
-    min-width: 680px;
+    min-width: 45rem;
+    max-height: none;
   }
   .switch button {
     font-size: 0.8rem;

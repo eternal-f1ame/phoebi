@@ -19,6 +19,7 @@ export const site = {
   short: "PHOEBI",
   subtitle: "An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy",
   venue: "NeurIPS 2026 · Track on Evaluations and Datasets",
+  venueUrl: "https://neurips.cc/Conferences/2026",
   url: "https://phoebi-benchmark.vercel.app",
   description:
     "120,000 phase-contrast microscopy images of 40 combinations of six rod-shaped bacterial species, for recognising which species a culture contains, including combinations and species never seen in training.",
@@ -81,7 +82,11 @@ export const task = {
   pick: "Your answer",
   present: "present",
   absent: "absent",
-  score: (right: number, of: number) => `${right} of ${of} species right.`,
+  // Species found among those present, and wrong picks; an absent species left unpicked earns
+  // nothing, so an empty answer cannot score.
+  score: (found: number, present: number, wrong: number) =>
+    `You found ${found} of ${present} species${wrong ? `, with ${wrong} wrong ${wrong === 1 ? "pick" : "picks"}` : ""}.`,
+  pickFirst: "Pick at least one species first: every culture contains one or more.",
   tally: (perfect: number, fields: number) => `${perfect} of ${fields} ${fields === 1 ? "field" : "fields"} fully right`,
   contains: "This culture contains",
   heldOut: "It is one of the nine combinations held out under leave-combinations-out.",

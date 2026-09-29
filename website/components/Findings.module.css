@@ -1,19 +1,20 @@
-/* Side by side, the columns differ in width so that the three findings end at the same height:
-   each gets a one-line title and five lines of text. The ratio sits in the middle of the range
-   that does this at the full 952 px column (1.45 to 1.6 : 1 : 0.85 to 1); narrower windows stack
-   the findings instead. A change to the findings' text needs the ratio re-measured. */
+/* Side by side, the findings are cards of one height. Each column's width follows the length of
+   its finding (--w1..--w3, set from the text), so their texts fill the cards about evenly at any
+   window width. Narrow windows stack them. */
 .list {
   list-style: none;
-  margin: 14px 0 0;
+  margin: 2.1vh 0 0;
   padding: 0;
   display: grid;
-  grid-template-columns: minmax(0, 1.52fr) minmax(0, 1fr) minmax(0, 0.93fr);
-  gap: 28px;
+  grid-template-columns: minmax(0, var(--w1)) minmax(0, var(--w2)) minmax(0, var(--w3));
+  gap: 1.4vw;
 }
 
 .list li {
-  padding-top: 12px;
-  border-top: 1px solid var(--rule);
+  padding: 2.1vh 1.2vw;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
 }
 
 .number {
@@ -23,11 +24,11 @@
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 1.2vh;
 }
 
 .list h3 {
-  margin-bottom: 6px;
+  margin-bottom: 0.9vh;
 }
 
 .list p {
@@ -40,6 +41,6 @@
 @media (max-width: 999px) {
   .list {
     grid-template-columns: minmax(0, 1fr);
-    gap: 20px;
+    gap: 2.4vh;
   }
 }

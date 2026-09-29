@@ -1,10 +1,10 @@
 .heading {
-  margin-bottom: 10px;
+  margin-bottom: 1.5vh;
 }
 
 .number {
   display: block;
-  margin-bottom: 3px;
+  margin-bottom: 0.45vh;
   color: var(--violet);
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 0.72rem;

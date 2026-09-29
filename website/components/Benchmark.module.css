@@ -3,8 +3,8 @@
   flex-wrap: wrap;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 12px 32px;
-  margin-bottom: 10px;
+  gap: 1.8vh 2.4vw;
+  margin-bottom: 1.5vh;
 }
 
 .top > :first-child {
@@ -21,7 +21,7 @@
 .stats li {
   display: flex;
   flex-direction: column;
-  padding: 0 18px;
+  padding: 0 1.3vw;
 }
 
 .stats li + li {
@@ -50,8 +50,8 @@
 .protocols {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 22px;
-  margin: 0 0 16px;
+  gap: 1.6vw;
+  margin: 0 0 2.4vh;
 }
 
 .protocols dt {
@@ -79,7 +79,7 @@
   }
   .stats li,
   .stats li:last-child {
-    padding: 10px 14px;
+    padding: 1.2vh 3.5vw;
   }
   .stats li:nth-child(3) {
     border-left: 0;
@@ -89,6 +89,6 @@
   }
   .protocols {
     grid-template-columns: minmax(0, 1fr);
-    gap: 14px;
+    gap: 2vh;
   }
 }

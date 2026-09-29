@@ -1,7 +1,7 @@
 @media screen {
   .waiting {
     opacity: 0;
-    transform: translateY(16px);
+    transform: translateY(2.4vh);
   }
 }
 

@@ -1,17 +1,17 @@
 /* sized so the whole header fits a laptop browser window (down to about 1280 x 570 px of viewport) */
 .hero {
-  padding: 34px 0 30px;
+  padding: 5vh 0 4.5vh;
 }
 
 .grid {
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
-  gap: 48px;
+  gap: 4vw;
   align-items: center;
 }
 
 .venue {
-  margin: 0 0 14px;
+  margin: 0 0 2vh;
   color: var(--violet);
   font-size: 0.74rem;
   font-weight: 600;
@@ -19,8 +19,18 @@
   text-transform: uppercase;
 }
 
+.venue a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.venue a:hover {
+  color: var(--violet-2);
+}
+
 .title {
-  margin: 0 0 18px;
+  margin: 0 0 2.6vh;
 }
 
 .name {
@@ -33,7 +43,7 @@
 
 .subtitle {
   display: block;
-  margin-top: 10px;
+  margin-top: 1.4vh;
   text-wrap: balance;
   font-size: clamp(1.05rem, 1.6vw, 1.22rem);
   font-weight: 400;
@@ -41,7 +51,7 @@
 }
 
 .authors {
-  margin: 0 0 2px;
+  margin: 0 0 0.3vh;
   font-weight: 500;
 }
 
@@ -71,15 +81,16 @@
   font-size: 0.95rem;
 }
 
+/* the eyepiece is sized by the window's height, so the header always fits it */
 .view {
   width: 100%;
-  max-width: 290px;
+  max-width: 44vh;
   margin: 0 0 0 auto;
-  padding: 12px;
+  padding: 1.8vh;
 }
 
 .view figcaption {
-  margin-top: 18px;
+  margin-top: 2.6vh;
   color: var(--ink-2);
   font-size: 0.85rem;
   line-height: 1.5;
@@ -88,14 +99,14 @@
 
 @media (max-width: 860px) {
   .hero {
-    padding: 48px 0 56px;
+    padding: 5vh 0 6vh;
   }
   .grid {
     grid-template-columns: minmax(0, 1fr);
-    gap: 40px;
+    gap: 5vh;
   }
   .view {
-    max-width: 300px;
+    max-width: 75vw;
     margin: 0 auto;
   }
 }

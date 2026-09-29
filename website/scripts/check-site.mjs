@@ -19,6 +19,7 @@ const SPECIES = [
 const SECTIONS = ["task", "species", "collection", "method", "benchmark", "results", "findings", "data", "citation"];
 const CODE = "https://github.com/eternal-f1ame/phoebi";
 const DATASET = "https://huggingface.co/datasets/sochastic/PHOEBI";
+const NEURIPS = "https://neurips.cc/Conferences/2026";
 
 const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
 const decode = (s) => s
@@ -64,6 +65,7 @@ const anchors = [...html.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)].map((m) => tex
 need(!anchors.some((t) => /\bPaper\b/.test(t)), "Paper must not be a link yet");
 need(html.includes(`href="${CODE}`), `a link to ${CODE}`);
 need(html.includes(`href="${DATASET}`), `a link to ${DATASET}`);
+need(html.includes(`href="${NEURIPS}"`), `a link to the NeurIPS 2026 website (${NEURIPS})`);
 
 const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map((m) => m[1]));
 for (const s of SECTIONS) need(ids.has(s), `section id "${s}"`);
@@ -81,6 +83,21 @@ need(
     /<button[^>]*aria-pressed="false"[^>]*>Leave-combinations-out<\/button>/.test(html),
   "the split switch, on the random split",
 );
+
+// Sizes in the stylesheets are relative (vw, vh, rem, em, %), so the page scales with the window.
+// Allowed in px: 1-2 px hairlines, media-query breakpoints, and inside the SVG diagrams the label
+// sizes and moves, which are in the drawing's own units and scale with it.
+const SRC = fileURLToPath(new URL("../", import.meta.url));
+const SVG_MODULES = ["CultureFlow.module.css", "DecoderFlow.module.css", "LcoMatrix.module.css"];
+const styles = ["app/globals.css", ...readdirSync(join(SRC, "components")).filter((f) => f.endsWith(".css")).map((f) => `components/${f}`)];
+for (const file of styles) {
+  readFileSync(join(SRC, file), "utf8").split("\n").forEach((line, i) => {
+    const px = [...line.matchAll(/(-?\d*\.?\d+)px\b/g)].map((m) => Math.abs(Number(m[1])));
+    if (!px.length || line.includes("@media") || px.every((n) => n <= 2)) return;
+    if (SVG_MODULES.some((m) => file.endsWith(m)) && /font-size|translate/.test(line)) return;
+    need(false, `a px size in ${file}:${i + 1}: ${line.trim()}`);
+  });
+}
 
 // Every same-site file the page references must exist; together they must stay light. That
 // includes the images its scripts load later (the quiz fields and the matrix thumbnails).

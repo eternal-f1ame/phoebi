@@ -1,29 +1,29 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 16px;
+  gap: 1.8vh 0.9vw;
+  margin-top: 2.4vh;
 }
 
 /* the micrograph beside its reference data, so all six fit one screen */
 .card {
   display: grid;
-  grid-template-columns: 104px minmax(0, 1fr);
-  gap: 14px;
+  grid-template-columns: 16vh minmax(0, 1fr);
+  gap: 1vw;
   align-items: center;
-  padding: 14px;
+  padding: 2.1vh 1vw;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
 }
 
 .view {
-  width: 104px;
-  padding: 4px;
+  width: 16vh;
+  padding: 0.6vh;
 }
 
 .code {
-  margin: 0 0 1px;
+  margin: 0 0 0.15vh;
   color: var(--ink-2);
   font-family: var(--font-mono), ui-monospace, monospace;
   font-size: 0.72rem;
@@ -31,7 +31,7 @@
 }
 
 .name {
-  margin: 0 0 6px;
+  margin: 0 0 0.9vh;
   font-size: 0.98rem;
   font-weight: 500;
 }
@@ -45,8 +45,8 @@
 .facts div {
   display: grid;
   grid-template-columns: 4.8em minmax(0, 1fr);
-  gap: 6px;
-  padding: 2px 0;
+  gap: 0.5em;
+  padding: 0.3vh 0;
   border-top: 1px solid var(--rule);
 }
 

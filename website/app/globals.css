@@ -13,7 +13,7 @@
   --violet: #4b2e83;
   --violet-2: #36205f;
   --safranin: #b83b5e;
-  --radius: 10px;
+  --radius: 0.7rem;
 }
 
 * {
@@ -65,7 +65,7 @@ p {
 a {
   color: var(--violet);
   text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
+  text-underline-offset: 0.2em;
 }
 
 a:hover {
@@ -74,8 +74,8 @@ a:hover {
 
 :focus-visible {
   outline: 2px solid var(--violet);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline-offset: 0.2em;
+  border-radius: 0.25rem;
 }
 
 img {
@@ -89,16 +89,17 @@ pre {
   font-family: var(--font-mono), ui-monospace, monospace;
 }
 
+/* Sizes are relative to the window: widths and horizontal gaps in vw, heights and vertical
+   spacing in vh, padding inside controls in em. Text stays in rem so browser zoom enlarges it. */
 .container {
-  max-width: 1000px;
+  width: 90vw;
   margin: 0 auto;
-  padding: 0 24px;
 }
 
 .section {
-  padding: 34px 0;
+  padding: 5vh 0;
   border-top: 1px solid var(--rule);
-  scroll-margin-top: 12px;
+  scroll-margin-top: 2vh;
 }
 
 .lead {
@@ -108,7 +109,7 @@ pre {
 /* figures and their numbered captions, as in the paper */
 .figure {
   margin: 0;
-  padding: 12px;
+  padding: 1.8vh 0.9vw;
   background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
@@ -119,7 +120,7 @@ pre {
 }
 
 .figure figcaption {
-  margin-top: 8px;
+  margin-top: 1.2vh;
   color: var(--ink-2);
   font-size: 0.85rem;
   line-height: 1.55;

@@ -25,16 +25,19 @@ export default function TryTask() {
   const [pos, setPos] = useState(0);
   const [picked, setPicked] = useState<Set<string>>(new Set());
   const [checked, setChecked] = useState(false);
+  const [empty, setEmpty] = useState(false); // Check answer pressed with nothing picked
   const [tally, setTally] = useState({ fields: 0, perfect: 0 });
 
   useEffect(() => setOrder(shuffled(FIRST)), []);
 
   const combo = combinations[order[pos]];
   const truth = new Set(combo.species);
-  const correct = species.filter((s) => truth.has(s.code) === picked.has(s.code)).length;
+  const found = combo.species.filter((c) => picked.has(c)).length;
+  const wrong = [...picked].filter((c) => !truth.has(c)).length;
 
   function toggle(code: string) {
     if (checked) return;
+    setEmpty(false);
     setPicked((prev) => {
       const next = new Set(prev);
       if (next.has(code)) next.delete(code);
@@ -47,14 +50,19 @@ export default function TryTask() {
   // does not fall back to the top of the page.
   function check() {
     if (checked) return;
+    if (picked.size === 0) {
+      setEmpty(true);
+      return;
+    }
     setChecked(true);
-    setTally((t) => ({ fields: t.fields + 1, perfect: t.perfect + (correct === species.length ? 1 : 0) }));
+    setTally((t) => ({ fields: t.fields + 1, perfect: t.perfect + (found === truth.size && wrong === 0 ? 1 : 0) }));
   }
 
   function next() {
     setPos((p) => (p + 1) % order.length);
     setPicked(new Set());
     setChecked(false);
+    setEmpty(false);
   }
 
   const names = species.filter((s) => truth.has(s.code)).map((s) => s.name);
@@ -103,9 +111,10 @@ export default function TryTask() {
               {tally.fields > 0 && <span className={styles.tally}>{task.tally(tally.perfect, tally.fields)}</span>}
             </div>
             <div className={styles.result} aria-live="polite">
+              {empty && !checked && <p className={styles.note}>{task.pickFirst}</p>}
               {checked && (
                 <>
-                  <p className={styles.score}>{task.score(correct, species.length)}</p>
+                  <p className={styles.score}>{task.score(found, truth.size, wrong)}</p>
                   <p>
                     {task.contains} <em>{names.join(", ")}</em>. {combo.heldOut ? task.heldOut : task.trained}
                   </p>
