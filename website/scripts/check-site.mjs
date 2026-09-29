@@ -77,6 +77,7 @@ need(/<meta[^>]+property="og:image"/.test(html), "an og:image meta tag");
 need(!/acknowledg/i.test(text), "no acknowledgments section");
 need(!text.includes("Optical microscopy (OM) enables rapid"), "no paper abstract on the page");
 need(/Check answer/.test(text), 'the "Try the task" check button');
+need(!/>\s*0[1-9]\s*<\/span>\s*<h2/.test(html), "section headings without numbers");
 // the protocol list names the same two splits, so look for the switch's own buttons
 need(
   /<button[^>]*aria-pressed="true"[^>]*>Random split<\/button>/.test(html) &&

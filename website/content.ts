@@ -40,17 +40,17 @@ export const links: { paper: Link; code: Link; dataset: Link; bibtex: Link } = {
   bibtex: { label: "BibTeX", href: "#citation" },
 };
 
-// In page order; the numbers are the small labels above each heading.
+// In page order.
 export const sections = {
-  task: { number: "01", title: "Try the task" },
-  species: { number: "02", title: "Species" },
-  collection: { number: "03", title: "Data collection" },
-  method: { number: "04", title: "Method" },
-  benchmark: { number: "05", title: "Benchmark" },
-  results: { number: "06", title: "Results" },
-  findings: { number: "07", title: "Findings" },
-  data: { number: "08", title: "Data access" },
-  citation: { number: "09", title: "Citation" },
+  task: { title: "Try the task" },
+  species: { title: "Species" },
+  collection: { title: "Data collection" },
+  method: { title: "Method" },
+  benchmark: { title: "Benchmark" },
+  results: { title: "Results" },
+  findings: { title: "Findings" },
+  data: { title: "Data access" },
+  citation: { title: "Citation" },
 };
 
 export const field: Figure = {

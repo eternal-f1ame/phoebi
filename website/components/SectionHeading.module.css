@@ -2,16 +2,6 @@
   margin-bottom: 1.5vh;
 }
 
-.number {
-  display: block;
-  margin-bottom: 0.45vh;
-  color: var(--violet);
-  font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-}
-
 .heading h2 {
   margin: 0;
 }
