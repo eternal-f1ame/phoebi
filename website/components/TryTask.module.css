@@ -44,7 +44,7 @@
   padding: 8px 11px;
   border: 1px solid var(--rule);
   border-radius: 8px;
-  background: var(--white);
+  background: var(--surface);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.9rem;
@@ -136,7 +136,7 @@
 
 .secondary {
   border: 1px solid var(--rule);
-  background: var(--white);
+  background: var(--surface);
   color: var(--ink);
 }
 

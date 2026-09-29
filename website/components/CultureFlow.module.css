@@ -17,7 +17,7 @@
 }
 
 .ring {
-  fill: var(--white);
+  fill: var(--surface);
   stroke: var(--rule);
   stroke-width: 1.5;
 }

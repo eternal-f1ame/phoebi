@@ -1,6 +1,7 @@
 /* The image stops short of the full column so the figure and its caption fit one screen; its
-   labels stay legible at this width. */
+   labels stay legible at this width. Its white background takes the card's tone. */
 .figure img {
   max-width: 800px;
   margin: 0 auto;
+  mix-blend-mode: multiply;
 }

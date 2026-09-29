@@ -1,14 +1,15 @@
-/* A restrained academic page: warm paper, near-black ink, one accent (crystal violet, the
-   Gram stain's primary dye). Text uses only ink, ink-2 or violet. Safranin, the counterstain, is
-   the one contrast colour and never colours text: the dot that marks a Gram-negative species, the
+/* A restrained academic page: warm stone paper, soft off-white surfaces for cards and diagrams
+   (no pure white, which glares), near-black ink, one accent (crystal violet, the Gram stain's
+   primary dye). Text uses only ink, ink-2 or violet. Safranin, the counterstain, is the one
+   contrast colour and never colours text: the dot that marks a Gram-negative species, the
    held-out combinations, a wrong pick in the quiz and the method diagram's decision threshold. */
 :root {
-  --paper: #fbfaf6;
+  --paper: #ebe7de;
   --paper-2: #f3f0e8;
-  --white: #ffffff;
+  --surface: #f7f5ef;
   --ink: #1c1b22;
   --ink-2: #4a4854;
-  --rule: #e2ded3;
+  --rule: #d8d2c5;
   --violet: #4b2e83;
   --violet-2: #36205f;
   --safranin: #b83b5e;
@@ -108,7 +109,7 @@ pre {
 .figure {
   margin: 0;
   padding: 12px;
-  background: var(--white);
+  background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
 }

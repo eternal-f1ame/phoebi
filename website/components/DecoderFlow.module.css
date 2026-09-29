@@ -34,7 +34,7 @@
 }
 
 .box {
-  fill: var(--white);
+  fill: var(--surface);
   stroke: var(--ink);
   stroke-width: 1.5;
 }
@@ -63,7 +63,7 @@
 }
 
 .proto {
-  fill: var(--white);
+  fill: var(--surface);
   stroke: #9b98a6;
   stroke-width: 1.4;
 }
@@ -107,7 +107,7 @@
 }
 
 .chip rect {
-  fill: var(--white);
+  fill: var(--surface);
   stroke: var(--rule);
 }
 
@@ -154,7 +154,7 @@
   }
 
   :global(.js) .armed .chipOn rect {
-    fill: var(--white);
+    fill: var(--surface);
     stroke: var(--rule);
   }
 
@@ -173,7 +173,7 @@
   }
 
   .fade .chipOn rect {
-    fill: var(--white);
+    fill: var(--surface);
     stroke: var(--rule);
     transition:
       fill 0.45s ease,
@@ -263,7 +263,7 @@
 
 @keyframes light-fill {
   from {
-    fill: var(--white);
+    fill: var(--surface);
     stroke: var(--rule);
   }
   to {

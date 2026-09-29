@@ -12,7 +12,7 @@
   gap: 14px;
   align-items: center;
   padding: 14px;
-  background: var(--white);
+  background: var(--surface);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
 }

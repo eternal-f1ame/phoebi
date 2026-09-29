@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image", title: site.title, description: site.description, images: [preview] },
 };
 
-export const viewport: Viewport = { themeColor: "#fbfaf6" };
+export const viewport: Viewport = { themeColor: "#ebe7de" };
 
 // Marks the page as scripted before its first paint, so an animated diagram can start empty
 // without readers who have no JavaScript seeing it empty. The class is added outside React,

@@ -9,7 +9,7 @@
   padding: 50px 18px 18px;
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  background: var(--white);
+  background: var(--surface);
   font-size: 0.82rem;
   line-height: 1.6;
   overflow-x: auto;
@@ -23,7 +23,7 @@
   padding: 0.35em 0.9em;
   border: 1px solid var(--rule);
   border-radius: 6px;
-  background: var(--white);
+  background: var(--surface);
   color: var(--ink);
   font-family: var(--font-sans), system-ui, sans-serif;
   font-size: 0.82rem;
