@@ -2,14 +2,14 @@
 
 <p align="center">
   <a href="https://phoebi-benchmark.vercel.app"><img src="https://img.shields.io/badge/project-page-6B4EE6?style=flat-square" alt="Project page"></a>
-  <img src="https://img.shields.io/badge/paper-coming%20soon-lightgrey?style=flat-square" alt="Paper: coming soon">
+  <a href="https://arxiv.org/abs/2606.22890"><img src="https://img.shields.io/badge/arXiv-2606.22890-b31b1b?style=flat-square" alt="Paper on arXiv: 2606.22890"></a>
   <a href="https://huggingface.co/datasets/sochastic/PHOEBI"><img src="https://img.shields.io/badge/dataset-Hugging%20Face-FFC845?style=flat-square" alt="Dataset on Hugging Face"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/code-MIT-FF6B9A?style=flat-square" alt="Code licence: MIT"></a>
 </p>
 
 <p align="center"><img src="website/public/img/teaser.webp" alt="PHOEBI at a glance: a field containing all six species, each model's F1 on seen versus unseen mixtures, and open-set results" width="100%"></p>
 
-Code for *PHOEBI: An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy* (NeurIPS 2026, Track on Evaluations and Datasets): the three decoders, every baseline, and the drivers and batch scripts behind each result in the paper. The dataset, with its species, splits and evaluation protocols, is described on its card at [huggingface.co/datasets/sochastic/PHOEBI](https://huggingface.co/datasets/sochastic/PHOEBI).
+Code for [*PHOEBI: An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy*](https://arxiv.org/abs/2606.22890) (NeurIPS 2026, Track on Evaluations and Datasets): the three decoders, every baseline, and the drivers and batch scripts behind each result in the paper. The dataset, with its species, splits and evaluation protocols, is described on its card at [huggingface.co/datasets/sochastic/PHOEBI](https://huggingface.co/datasets/sochastic/PHOEBI).
 
 ## Setup
 
@@ -102,10 +102,13 @@ website/            the project page (Next.js, deployed on Vercel)
 
 ```bibtex
 @inproceedings{baranwal2026phoebi,
-  title     = {{PHOEBI}: An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy},
-  author    = {Baranwal, Aaditya and Hasan, Md Jahid and Vyas, Shruti},
-  booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
-  year      = {2026}
+  title         = {{PHOEBI}: An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy},
+  author        = {Baranwal, Aaditya and Hasan, Md Jahid and Vyas, Shruti},
+  booktitle     = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
+  year          = {2026},
+  eprint        = {2606.22890},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV}
 }
 ```
 

@@ -14,21 +14,14 @@ const ICONS = {
   bibtex: icon(<path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6" />),
 };
 
-// The dataset is the paper's main artifact, so its button is the filled one. The paper is not
-// public yet, so its button is not a link.
+// The dataset is the paper's main artifact, so its button is the filled one.
 export default function LinkButtons() {
   return (
     <nav className={styles.buttons} aria-label="Paper, code, dataset and citation">
-      <span
-        className={`${styles.button} ${styles.disabled}`}
-        role="link"
-        aria-disabled="true"
-        title="The paper link will appear when the proceedings are out"
-      >
+      <a className={styles.button} href={links.paper.href} target="_blank" rel="noopener noreferrer">
         {ICONS.paper}
         {links.paper.label}
-        <span className={styles.soon}>{links.paper.note}</span>
-      </span>
+      </a>
       <a className={`${styles.button} ${styles.primary}`} href={links.dataset.href} target="_blank" rel="noopener noreferrer">
         {ICONS.dataset}
         {links.dataset.label}

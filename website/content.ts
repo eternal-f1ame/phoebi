@@ -3,7 +3,7 @@
 // species, held-out flag and field image, from the released split manifests.
 import combinationData from "./combinations.json" with { type: "json" };
 
-export type Link = { label: string; href?: string; note?: string };
+export type Link = { label: string; href: string };
 export type Figure = { image: string; width: number; height: number; alt: string; caption: string };
 export type Species = { code: string; name: string; gram: "+" | "−"; motility: string; length: string; image: string };
 export type Stage = { title: string; text: string };
@@ -34,7 +34,7 @@ export const authors = [
 export const affiliation = "Institute of Artificial Intelligence, University of Central Florida";
 
 export const links: { paper: Link; code: Link; dataset: Link; bibtex: Link } = {
-  paper: { label: "Paper", note: "coming soon" },
+  paper: { label: "Paper", href: "https://arxiv.org/abs/2606.22890" },
   code: { label: "Code", href: CODE },
   dataset: { label: "Dataset", href: DATASET },
   bibtex: { label: "BibTeX", href: "#citation" },
@@ -202,10 +202,13 @@ export const dataAccess: { load: { title: string; note: Note }; fetch: { title: 
 };
 
 export const bibtex = `@inproceedings{baranwal2026phoebi,
-  title     = {{PHOEBI}: An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy},
-  author    = {Baranwal, Aaditya and Hasan, Md Jahid and Vyas, Shruti},
-  booktitle = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
-  year      = {2026}
+  title         = {{PHOEBI}: An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy},
+  author        = {Baranwal, Aaditya and Hasan, Md Jahid and Vyas, Shruti},
+  booktitle     = {Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets},
+  year          = {2026},
+  eprint        = {2606.22890},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV}
 }`;
 
 export const footer = {

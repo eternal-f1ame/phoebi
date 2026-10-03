@@ -20,6 +20,7 @@ const SECTIONS = ["task", "species", "collection", "method", "benchmark", "resul
 const CODE = "https://github.com/eternal-f1ame/phoebi";
 const DATASET = "https://huggingface.co/datasets/sochastic/PHOEBI";
 const NEURIPS = "https://neurips.cc/Conferences/2026";
+const PAPER = "https://arxiv.org/abs/2606.22890";
 
 const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " " };
 const decode = (s) => s
@@ -60,9 +61,9 @@ need(squash(text).includes(squash(TITLE)), `title "${TITLE}"`);
 for (const a of AUTHORS) need(text.includes(a), `author ${a}`);
 need(text.includes("Institute of Artificial Intelligence"), "affiliation: Institute of Artificial Intelligence");
 need(text.includes("University of Central Florida"), "affiliation: University of Central Florida");
-need(/coming soon/i.test(text), 'the Paper button\'s "coming soon"');
-const anchors = [...html.matchAll(/<a\b[^>]*>([\s\S]*?)<\/a>/gi)].map((m) => textOf(m[1]));
-need(!anchors.some((t) => /\bPaper\b/.test(t)), "Paper must not be a link yet");
+need(html.includes(`href="${PAPER}"`), `a link to the paper (${PAPER})`);
+need(!/coming soon/i.test(text), 'no "coming soon" left on the page');
+need(/eprint\s*=\s*\{2606\.22890\}/.test(text), "the BibTeX carries the arXiv identifier");
 need(html.includes(`href="${CODE}`), `a link to ${CODE}`);
 need(html.includes(`href="${DATASET}`), `a link to ${DATASET}`);
 need(html.includes(`href="${NEURIPS}"`), `a link to the NeurIPS 2026 website (${NEURIPS})`);

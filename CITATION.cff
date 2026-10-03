@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this code or the PHOEBI dataset, please cite the paper."
+title: "PHOEBI"
+type: software
+authors:
+  - given-names: Aaditya
+    family-names: Baranwal
+    affiliation: "Institute of Artificial Intelligence, University of Central Florida"
+  - given-names: Md Jahid
+    family-names: Hasan
+    affiliation: "Institute of Artificial Intelligence, University of Central Florida"
+  - given-names: Shruti
+    family-names: Vyas
+    affiliation: "Institute of Artificial Intelligence, University of Central Florida"
+repository-code: "https://github.com/eternal-f1ame/phoebi"
+url: "https://phoebi-benchmark.vercel.app"
+license: MIT
+preferred-citation:
+  type: conference-paper
+  title: "PHOEBI: An Open-World Benchmark for Multi-Label Bacterial Identification in Phase-Contrast Microscopy"
+  authors:
+    - given-names: Aaditya
+      family-names: Baranwal
+    - given-names: Md Jahid
+      family-names: Hasan
+    - given-names: Shruti
+      family-names: Vyas
+  collection-title: "Advances in Neural Information Processing Systems (NeurIPS), Track on Evaluations and Datasets"
+  year: 2026
+  url: "https://arxiv.org/abs/2606.22890"
+  identifiers:
+    - type: other
+      value: "arXiv:2606.22890"
+      description: "The paper on arXiv"
