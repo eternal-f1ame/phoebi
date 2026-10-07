@@ -1,0 +1,106 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>03-culture</title></head>
+<body>
+<script src="lib.js"></script>
+<script>
+// From flask to label in line art (the website's culture flow, scaled up): a dot travels the
+// track and each stage lights as it passes, and stays lit.
+const W = 1728, H = 420;
+const svg = setup(W, H, 9.4, 1);
+const X = [150, 436, 722, 1008, 1294, 1580];
+const Y = 120, R = 84;
+const STAGES = [
+  ["Grow", "each species on its own,", "from a glycerol stock"],
+  ["Verify", "checked under the", "microscope: pure"],
+  ["Mix", "combined at a set ratio,", "only at imaging time"],
+  ["Mount", "straight onto a slide,", "an unstained wet mount"],
+  ["Image", "phase contrast at 1000×,", "oil immersion"],
+  ["Label", "the culture’s species,", "verified per culture"],
+];
+
+const track = el("line", { x1: X[0], x2: X[5], y1: Y, y2: Y, stroke: C.rule, "stroke-width": 3, "stroke-dasharray": "3 10", "stroke-linecap": "round" }, svg);
+const trackOn = el("line", { x1: X[0], x2: X[0], y1: Y, y2: Y, stroke: C.violet, "stroke-width": 3, "stroke-linecap": "round", opacity: 0.35 }, svg);
+
+const ICON = { fill: "none", stroke: C.ink, "stroke-width": 1.7, "stroke-linecap": "round", "stroke-linejoin": "round" };
+function flask(p, dx) {
+  const g = el("g", { transform: `translate(${dx} 0) scale(0.62)` }, p);
+  el("path", { d: "M-5 -22v12l-13 22a3 3 0 0 0 3 4.5h30a3 3 0 0 0 3-4.5l-13-22v-12z" }, g);
+  el("path", { d: "M-12.5 6h25l3.8 6.2a3 3 0 0 1-3 4.3h-26.6a3 3 0 0 1-3-4.3z", fill: "rgba(75,46,131,0.18)", stroke: "none" }, g);
+}
+const drawIcon = [
+  (g) => { flask(g, -15); flask(g, 0); flask(g, 15); },
+  (g) => {
+    el("circle", { cx: -4, cy: -4, r: 13 }, g);
+    el("path", { d: "M5.5 5.5l11 11" }, g);
+    el("path", { d: "M-10 -4l4 4 8-8", stroke: C.violet }, g);
+  },
+  (g) => {
+    el("path", { d: "M-9 -24v36a9 9 0 0 0 18 0v-36" }, g);
+    el("path", { d: "M-12 -24h24" }, g);
+    [[-3, 2, C.violet], [3.5, 8, C.safranin], [-2, 13, C.violet], [2.5, -4, C.safranin]].forEach(([cx, cy, f]) =>
+      el("circle", { class: "mixdot", cx, cy, r: 2.4, fill: f, stroke: "none" }, g));
+  },
+  (g) => {
+    el("rect", { x: -26, y: -8, width: 52, height: 16, rx: 2.5 }, g);
+    el("rect", { x: -10, y: -11, width: 20, height: 22, rx: 1.5, fill: "rgba(75,46,131,0.12)", stroke: C.violet }, g);
+  },
+  (g) => {
+    el("path", { d: "M-16 24h32M-2 24v-6M-14 10h26M9 24c0-14 2-24-8-34" }, g);
+    el("path", { d: "M-10 -20l9 -8 6 7-9 8z" }, g);
+    el("path", { d: "M-4 -12l6 14" }, g);
+  },
+  (g) => {
+    el("rect", { x: -18, y: -24, width: 36, height: 28, rx: 3 }, g);
+    el("rect", { x: -12, y: -17, width: 10, height: 3.6, rx: 1.8, transform: "rotate(-20 -7 -15)", fill: C.ink2, stroke: "none" }, g);
+    el("rect", { x: 0, y: -10, width: 12, height: 3.6, rx: 1.8, transform: "rotate(15 6 -8)", fill: C.ink2, stroke: "none" }, g);
+    el("rect", { x: -9, y: -6, width: 6, height: 3.6, rx: 1.8, fill: C.ink2, stroke: "none" }, g);
+    [["bs", -20], ["fj", -6], ["ka", 7]].forEach(([s, dx]) => txt(g, dx, 17, s, { size: 8, mono: true, fill: C.violet, weight: 700 }).setAttribute("stroke", "none"));
+  },
+];
+
+const stages = STAGES.map(([title, a, b], i) => {
+  const g = el("g", {}, svg);
+  const ring = el("circle", { cx: X[i], cy: Y, r: R, fill: C.surface, stroke: C.rule, "stroke-width": 2.5 }, g);
+  const icon = el("g", { ...ICON, transform: `translate(${X[i]} ${Y}) scale(2.1)` }, g);
+  drawIcon[i](icon);
+  const cap = el("g", {}, svg);
+  txt(cap, X[i], 262, String(i + 1).padStart(2, "0"), { size: 18, anchor: "middle", fill: C.violet, weight: 700, mono: true });
+  txt(cap, X[i], 298, title, { size: 30, anchor: "middle", weight: 700 });
+  txt(cap, X[i], 334, a, { size: 20, anchor: "middle", fill: C.ink2 });
+  txt(cap, X[i], 360, b, { size: 20, anchor: "middle", fill: C.ink2 });
+  return { g, ring, icon, cap };
+});
+const dot = el("circle", { r: 10, fill: C.violet }, svg);
+const mixdots = [...svg.querySelectorAll(".mixdot")];
+const mixBase = mixdots.map((d) => [+d.getAttribute("cx"), +d.getAttribute("cy")]);
+
+const T0 = 0.6, T1 = 7.6; // the dot's run
+function render(t) {
+  const p = seg(t, T0, T1, ease.linear);
+  const xd = lerp(X[0], X[5], p);
+  dot.setAttribute("cx", xd); dot.setAttribute("cy", Y);
+  show(dot, seg(t, 0.2, 0.6) * (1 - seg(t, T1 + 0.2, T1 + 0.8)));
+  trackOn.setAttribute("x2", xd);
+  stages.forEach((s, i) => {
+    const tHit = lerp(T0, T1, (X[i] - X[0]) / (X[5] - X[0]));
+    const hit = seg(t, tHit - 0.15, tHit + 0.35);
+    const flash = seg(t, tHit - 0.1, tHit + 0.2) * (1 - seg(t, tHit + 0.3, tHit + 1.0));
+    s.ring.setAttribute("stroke", mix(C.rule, C.violet, hit));
+    s.ring.setAttribute("stroke-width", 2.5 + 3 * flash);
+    s.ring.setAttribute("fill", mix(C.surface, "#ffffff", hit));
+    s.icon.setAttribute("transform", `translate(${X[i]} ${Y}) scale(${2.1 * (1 + 0.12 * flash)})`);
+    show(s.icon, lerp(0.35, 1, hit));
+    show(s.cap, lerp(0.3, 1, seg(t, tHit - 0.1, tHit + 0.5)));
+  });
+  // the mixing stage swirls while lit
+  mixdots.forEach((d, k) => {
+    const a = t * 3.2 + k * 1.6;
+    const amp = 2.2 * seg(t, 2.8, 3.4);
+    d.setAttribute("cx", mixBase[k][0] + amp * Math.cos(a));
+    d.setAttribute("cy", mixBase[k][1] + amp * Math.sin(a));
+  });
+}
+window.render = render;
+ready();
+</script>
+</body></html>

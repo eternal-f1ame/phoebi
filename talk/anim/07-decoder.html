@@ -1,0 +1,177 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>07-decoder</title></head>
+<body>
+<script src="lib.js"></script>
+<script>
+// How the anchor decoders read one image (the website's method diagram, scaled up), with a prelude
+// for Assumption H: in a wet mount any large enough crop carries the whole image's label.
+const W = 1728, H = 500;
+const svg = setup(W, H, 11.6, 1);
+const PRESENT = ["bs", "fj", "ka"];
+const codes = SPECIES.map((s) => s.code);
+const HEIGHT = { bs: 0.82, bt: 0.2, fj: 0.72, ka: 0.9, mx: 0.26, pf: 0.16 }; // schematic
+const defs = el("defs", {}, svg);
+const mk = el("marker", { id: "ah", viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto" }, defs);
+el("path", { d: "M0 0L10 5 0 10z", fill: C.muted }, mk);
+
+// 1. the image
+const IX = 40, IY = 46, IS = 280;
+const cp = el("clipPath", { id: "img" }, defs);
+el("rect", { x: IX, y: IY, width: IS, height: IS, rx: 10 }, cp);
+const imgG = el("g", {}, svg);
+el("image", { href: "img/bs_ka_fj.png", x: IX, y: IY, width: IS, height: IS, "clip-path": "url(#img)" }, imgG);
+el("rect", { x: IX, y: IY, width: IS, height: IS, rx: 10, fill: "none", stroke: C.ink, "stroke-width": 2 }, imgG);
+const hCap = txt(svg, IX + IS / 2, 28, "any crop carries the image’s label", { size: 20, anchor: "middle", fill: C.violet, weight: 700 });
+
+// Assumption H: four random crops, each tagged with the same label
+const CROPS = [[18, 26], [150, 10], [40, 160], [168, 150]];
+const CS = 92;
+const crops = CROPS.map(([dx, dy], k) => {
+  const g = el("g", {}, svg);
+  el("rect", { x: IX + dx, y: IY + dy, width: CS, height: CS, rx: 4, fill: "rgba(255,255,255,0.12)", stroke: "#ffffff", "stroke-width": 3 }, g);
+  const tag = el("g", {}, g);
+  el("rect", { x: IX + dx + 6, y: IY + dy + CS - 26, width: 80, height: 20, rx: 10, fill: C.violet }, tag);
+  txt(tag, IX + dx + 46, IY + dy + CS - 15, "bs fj ka", { size: 13, anchor: "middle", baseline: "middle", mono: true, weight: 700, fill: C.white });
+  return g;
+});
+// the 4 x 4 grid
+const grid = el("g", { stroke: "#ffffff", "stroke-width": 2.2 }, svg);
+const gridLines = [];
+for (let k = 1; k < 4; k++) {
+  gridLines.push(el("line", { x1: IX + (k * IS) / 4, x2: IX + (k * IS) / 4, y1: IY, y2: IY + IS }, grid));
+  gridLines.push(el("line", { y1: IY + (k * IS) / 4, y2: IY + (k * IS) / 4, x1: IX, x2: IX + IS }, grid));
+}
+
+// 2. encoder
+const EX = 470, EY = 186;
+const arrows = [[IX + IS + 16, 438], [EX + 70, 620], [1000, 1078], [1352, 1410]].map(([a, b]) =>
+  el("line", { x1: a, x2: b, y1: EY, y2: EY, stroke: C.muted, "stroke-width": 3, "marker-end": "url(#ah)" }, svg));
+const enc = el("g", {}, svg);
+const encBox = el("rect", { x: EX - 64, y: EY - 70, width: 128, height: 140, rx: 16, fill: C.surface, stroke: C.ink, "stroke-width": 2.5 }, enc);
+txt(enc, EX, EY - 14, "frozen", { size: 24, anchor: "middle", weight: 700 });
+txt(enc, EX, EY + 18, "DINOv2", { size: 20, anchor: "middle", mono: true, fill: C.ink2 });
+txt(enc, EX, EY + 42, "S/14", { size: 20, anchor: "middle", mono: true, fill: C.ink2 });
+const flyTiles = [0, 1, 2].map((k) => el("rect", { width: 40, height: 40, rx: 4, fill: "rgba(75,46,131,0.16)", stroke: C.violet, "stroke-width": 2 }, svg));
+
+// 3. compare with prototypes
+const PX = 810, PY = EY, PR = 120;
+const comp = el("g", {}, svg);
+el("circle", { cx: PX, cy: PY, r: PR, fill: "none", stroke: C.rule, "stroke-width": 2, "stroke-dasharray": "3 7" }, comp);
+const protos = codes.map((c, i) => {
+  const a = ((-90 + i * 60) * Math.PI) / 180;
+  const x = PX + PR * Math.cos(a), y = PY + PR * Math.sin(a);
+  const d = el("rect", { x: x - 11, y: y - 11, width: 22, height: 22, transform: `rotate(45 ${x} ${y})`, fill: C.white, stroke: C.muted, "stroke-width": 2.5 }, comp);
+  const lx = x + (Math.abs(x - PX) < 1 ? 0 : x < PX ? -26 : 26), ly = y + (Math.abs(x - PX) < 1 ? (y < PY ? -22 : 36) : 7);
+  txt(comp, lx, ly, c, { size: 20, anchor: Math.abs(x - PX) < 1 ? "middle" : x < PX ? "end" : "start", mono: true, weight: 700, fill: C.ink2 });
+  return { c, x, y, d };
+});
+// 16 tile embeddings land near the present species' prototypes
+let seed = 7;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const points = Array.from({ length: 16 }, (_, k) => {
+  const target = protos.find((p) => p.c === PRESENT[k % 3]);
+  const tx = lerp(PX, target.x, 0.66) + (rnd() - 0.5) * 34;
+  const ty = lerp(PY, target.y, 0.66) + (rnd() - 0.5) * 34;
+  return { e: el("circle", { r: 6, fill: C.violet, opacity: 0.7 }, svg), tx, ty, k };
+});
+
+// 4. averaged scores
+const BX = 1110, BY = 268, BH = 170;
+const barsG = el("g", {}, svg);
+const thr = el("line", { x1: BX - 10, x2: BX + 6 * 38, y1: BY - 0.5 * BH, y2: BY - 0.5 * BH, stroke: C.safranin, "stroke-width": 2.5, "stroke-dasharray": "6 5" }, barsG);
+const bars = codes.map((c, k) => {
+  const b = el("rect", { x: BX + k * 38, width: 26, rx: 4, fill: PRESENT.includes(c) ? C.violet : C.grey }, barsG);
+  txt(barsG, BX + k * 38 + 13, BY + 28, c, { size: 18, anchor: "middle", mono: true, fill: C.ink2, weight: 700 });
+  return b;
+});
+el("line", { x1: BX - 10, x2: BX + 6 * 38, y1: BY, y2: BY, stroke: C.ink2, "stroke-width": 2 }, barsG);
+
+// 5. decide
+const chips = codes.map((c, k) => chip(svg, 1480 + (k % 2) * 104, 112 + Math.floor(k / 2) * 66, 90, 46, c, { size: 22 }));
+
+// captions
+const CAPS = [
+  [IX + IS / 2, "01  Tile", "4 × 4 tiles of 224 px,", "illumination-corrected"],
+  [EX, "02  Encode", "frozen DINOv2,", "never fine-tuned"],
+  [PX, "03  Compare", "each tile vs. 6 prototypes", "from pure cultures"],
+  [BX + 108, "04  Average", "mean over the 16 tiles,", "one score per species"],
+  [1532, "05  Decide", "a calibrated threshold", "per species"],
+];
+const caps = CAPS.map(([x, a, b, c]) => {
+  const g = el("g", {}, svg);
+  txt(g, x, 384, a, { size: 25, anchor: "middle", weight: 700 });
+  txt(g, x, 418, b, { size: 20, anchor: "middle", fill: C.ink2 });
+  txt(g, x, 444, c, { size: 20, anchor: "middle", fill: C.ink2 });
+  return g;
+});
+const foot = txt(svg, W - 4, H - 8, "schematic; bar heights illustrative", { size: 16, anchor: "end", fill: C.muted, italic: true });
+
+function render(t) {
+  show(imgG, seg(t, 0, 0.5));
+  // H prelude
+  crops.forEach((g, k) => {
+    const p = seg(t, 0.7 + k * 0.3, 1.1 + k * 0.3, ease.back);
+    show(g, Math.min(1, p * 2) * (1 - seg(t, 3.0, 3.4)));
+  });
+  show(hCap, seg(t, 1.0, 1.5) * (1 - seg(t, 3.0, 3.4)));
+  // grid draws
+  gridLines.forEach((l, k) => {
+    const p = seg(t, 3.3 + k * 0.06, 3.9 + k * 0.06);
+    l.setAttribute("stroke-dasharray", IS);
+    l.setAttribute("stroke-dashoffset", IS * (1 - p));
+  });
+  show(caps[0], seg(t, 3.4, 3.9));
+
+  // tiles fly into the encoder
+  arrows.forEach((a, k) => show(a, seg(t, 4.0 + k * 1.5, 4.4 + k * 1.5)));
+  show(enc, seg(t, 4.0, 4.5));
+  show(caps[1], seg(t, 4.2, 4.7));
+  flyTiles.forEach((r, k) => {
+    const p = seg(t, 4.4 + k * 0.18, 5.4 + k * 0.18);
+    const sx = IX + 35 + k * 70, sy = IY + 35 + k * 70;
+    r.setAttribute("x", lerp(sx, EX - 20, p) - 20 * 0);
+    r.setAttribute("y", lerp(sy, EY - 20, p));
+    r.setAttribute("transform", `rotate(0)`);
+    show(r, p > 0 && p < 1 ? 1 - 0.6 * p : 0);
+  });
+  const pulse = seg(t, 5.4, 5.7) * (1 - seg(t, 5.9, 6.4));
+  encBox.setAttribute("stroke", mix(C.ink, C.violet, pulse));
+  encBox.setAttribute("stroke-width", 2.5 + 2.5 * pulse);
+
+  // embeddings land near prototypes
+  show(comp, seg(t, 5.6, 6.1));
+  show(caps[2], seg(t, 5.8, 6.3));
+  points.forEach((pt) => {
+    const p = seg(t, 6.1 + pt.k * 0.05, 7.1 + pt.k * 0.05, ease.out);
+    pt.e.setAttribute("cx", lerp(EX + 64, pt.tx, p));
+    pt.e.setAttribute("cy", lerp(EY, pt.ty, p));
+    show(pt.e, p > 0 ? 0.75 : 0);
+  });
+  protos.forEach((p) => {
+    const on = PRESENT.includes(p.c) ? seg(t, 7.3, 7.7) : 0;
+    p.d.setAttribute("fill", mix(C.white, C.violet, on));
+    p.d.setAttribute("stroke", mix(C.muted, C.violet, on));
+  });
+
+  // averaged bars rise
+  show(barsG, seg(t, 7.4, 7.8));
+  show(caps[3], seg(t, 7.6, 8.1));
+  bars.forEach((b, k) => {
+    const p = seg(t, 7.9 + k * 0.1, 8.9 + k * 0.1, ease.out);
+    const h = BH * HEIGHT[codes[k]] * p;
+    b.setAttribute("y", BY - h); b.setAttribute("height", Math.max(0.1, h));
+  });
+  show(thr, seg(t, 8.9, 9.3));
+
+  // decide
+  show(caps[4], seg(t, 9.2, 9.7));
+  chips.forEach((c, k) => {
+    show(c.g, seg(t, 9.0, 9.4));
+    styleChip(c, PRESENT.includes(codes[k]) && t > 9.6 + k * 0.1);
+  });
+  show(foot, seg(t, 10.2, 10.8));
+}
+window.render = render;
+ready();
+</script>
+</body></html>

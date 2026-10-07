@@ -1,0 +1,62 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>01-eyepiece</title></head>
+<body>
+<script src="lib.js"></script>
+<script>
+// Title: a field from the six-species culture comes into focus in an eyepiece, then the six
+// species it contains light up one by one.
+const W = 760, H = 860;
+const svg = setup(W, H, 8.2, 1);
+const CX = 380, CY = 370, R = 330;
+const defs = el("defs", {}, svg);
+const clip = el("clipPath", { id: "lens" }, defs);
+el("circle", { cx: CX, cy: CY, r: R - 14 }, clip);
+const blur = el("filter", { id: "focus", x: "-10%", y: "-10%", width: "120%", height: "120%" }, defs);
+const gb = el("feGaussianBlur", { stdDeviation: 10 }, blur);
+const vg = el("radialGradient", { id: "vignette", cx: "50%", cy: "50%", r: "50%" }, defs);
+el("stop", { offset: "62%", "stop-color": "#000", "stop-opacity": 0 }, vg);
+el("stop", { offset: "100%", "stop-color": "#000", "stop-opacity": 0.42 }, vg);
+
+// the eyepiece barrel
+el("circle", { cx: CX, cy: CY, r: R + 8, fill: C.ink }, svg);
+el("circle", { cx: CX, cy: CY, r: R - 4, fill: "none", stroke: "#3b3946", "stroke-width": 10 }, svg);
+const view = el("g", { "clip-path": "url(#lens)" }, svg);
+el("rect", { x: CX - R, y: CY - R, width: 2 * R, height: 2 * R, fill: "#8d8270" }, view);
+const img = el("image", { href: "img/field.png", width: 720, height: 720, preserveAspectRatio: "xMidYMid slice", filter: "url(#focus)" }, view);
+el("circle", { cx: CX, cy: CY, r: R - 14, fill: "url(#vignette)" }, view);
+
+// reticle
+const ret = el("g", { stroke: "#ffffff", "stroke-width": 2, opacity: 0 }, svg);
+el("line", { x1: CX - R + 40, x2: CX + R - 40, y1: CY, y2: CY, "stroke-opacity": 0.55 }, ret);
+el("line", { x1: CX, x2: CX, y1: CY - R + 40, y2: CY + R - 92, "stroke-opacity": 0.55 }, ret);
+for (let k = -10; k <= 10; k++) {
+  if (!k) continue;
+  const len = k % 5 ? 8 : 16;
+  el("line", { x1: CX + k * 26, x2: CX + k * 26, y1: CY - len / 2, y2: CY + len / 2, "stroke-opacity": 0.7 }, ret);
+}
+const mag = txt(svg, CX, CY + R - 46, "1000× phase contrast", { size: 20, anchor: "middle", fill: "#ffffff", weight: 600 });
+
+// the six species
+const chips = SPECIES.map((s, i) => chip(svg, 105 + i * 110, 790, 92, 50, s.code, { size: 24 }));
+
+function render(t) {
+  const f = seg(t, 0.1, 2.6, ease.out);
+  gb.setAttribute("stdDeviation", lerp(11, 0, f));
+  const s = lerp(1.16, 1.0, seg(t, 0, 3.2, ease.out));
+  const drift = lerp(-18, 0, seg(t, 0, 8, ease.out));
+  const size = 720 * s;
+  img.setAttribute("width", size); img.setAttribute("height", size);
+  img.setAttribute("x", CX - size / 2 + drift); img.setAttribute("y", CY - size / 2 + drift * 0.5);
+  show(ret, seg(t, 2.2, 3.0) * 0.9);
+  show(mag, seg(t, 2.4, 3.2));
+  chips.forEach((c, i) => {
+    const p = seg(t, 3.2 + i * 0.12, 3.7 + i * 0.12, ease.back);
+    c.g.setAttribute("transform", `translate(${c.cx} ${c.cy + 14 * (1 - p)})`);
+    show(c.g, Math.min(1, p * 2));
+    styleChip(c, t > 5.0 + i * 0.42, C.violet);
+  });
+}
+window.render = render;
+ready();
+</script>
+</body></html>

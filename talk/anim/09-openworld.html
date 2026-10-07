@@ -1,0 +1,142 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>09-openworld</title></head>
+<body>
+<script src="lib.js"></script>
+<script>
+// Open world, schematically, for the held-out-ka fold: ka tiles fall inside the hull of the other
+// five prototypes, so a global reconstruction score misses them; a local k-NN distance to the
+// training tiles flags them; Sinkhorn-Knopp with K = 1 pools them into one new prototype.
+const W = 1000, H = 800;
+const svg = setup(W, H, 13.4, 1);
+const CX = 500, CY = 330, PR = 240;
+const KNOWN = ["bs", "bt", "fj", "mx", "pf"];
+let seed = 11;
+const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+const gauss = () => { let u = 0, v = 0; while (!u) u = rnd(); while (!v) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
+
+const protos = KNOWN.map((c, i) => {
+  const a = ((-90 + i * 72) * Math.PI) / 180;
+  return { c, x: CX + PR * Math.cos(a), y: CY + PR * Math.sin(a) };
+});
+const hull = el("path", { d: "M" + protos.map((p) => `${p.x} ${p.y}`).join(" L") + " Z", fill: "rgba(75,46,131,0.035)", stroke: C.rule, "stroke-width": 2.5, "stroke-dasharray": "8 8" }, svg);
+
+// training tiles around each prototype
+const train = [];
+protos.forEach((p, i) => {
+  for (let k = 0; k < 14; k++) {
+    const x = p.x + gauss() * 24, y = p.y + gauss() * 24;
+    train.push({ x, y, i, e: el("circle", { cx: x, cy: y, r: 6, fill: "#b9aed3" }, svg) });
+  }
+});
+const protoEls = protos.map((p) => {
+  const g = el("g", {}, svg);
+  el("rect", { x: p.x - 13, y: p.y - 13, width: 26, height: 26, transform: `rotate(45 ${p.x} ${p.y})`, fill: C.violet, stroke: C.white, "stroke-width": 3 }, g);
+  const dx = p.x - CX, dy = p.y - CY, n = Math.hypot(dx, dy);
+  txt(g, p.x + (dx / n) * 52, p.y + (dy / n) * 52 + 8, p.c, { size: 24, anchor: "middle", mono: true, weight: 700, fill: C.violet });
+  return g;
+});
+
+// unknown ka tiles land inside the hull
+const KX = 528, KY = 372;
+const unk = Array.from({ length: 14 }, (_, k) => {
+  const x = KX + gauss() * 22, y = KY + gauss() * 22;
+  const sx = W + 40 + rnd() * 80, sy = 60 + rnd() * 200;
+  return { x, y, sx, sy, k, e: el("circle", { r: 7, fill: C.safranin }, svg) };
+});
+const focus = unk[0];
+
+// global residual: rebuild the focus tile from known prototypes
+const recon = el("g", {}, svg);
+[0, 2, 3].forEach((i) => el("line", { x1: focus.x, y1: focus.y, x2: protos[i].x, y2: protos[i].y, stroke: C.ink2, "stroke-width": 2, "stroke-dasharray": "6 6" }, recon));
+const reconTag = el("g", {}, svg);
+el("rect", { x: focus.x + 26, y: focus.y - 76, width: 252, height: 44, rx: 22, fill: C.white, stroke: C.safranin, "stroke-width": 2.5 }, reconTag);
+txt(reconTag, focus.x + 152, focus.y - 47, "small residual: “known”", { size: 19, anchor: "middle", fill: C.safranin, weight: 700 });
+
+// local k-NN: distance to the 10th-nearest training tile
+const dists = train.map((p) => Math.hypot(p.x - focus.x, p.y - focus.y)).sort((a, b) => a - b);
+const R10 = dists[9];
+const knn = el("circle", { cx: focus.x, cy: focus.y, fill: "rgba(184,59,94,0.07)", stroke: C.safranin, "stroke-width": 3 }, svg);
+const kRay = el("line", { x1: focus.x, y1: focus.y, stroke: C.safranin, "stroke-width": 2.5 }, svg);
+// a known species' test tile, for contrast: its 10 neighbours are close
+const ref = { x: protos[1].x - 8, y: protos[1].y + 10 };
+const rdists = train.map((p) => Math.hypot(p.x - ref.x, p.y - ref.y)).sort((a, b) => a - b);
+const refDot = el("circle", { cx: ref.x, cy: ref.y, r: 7, fill: C.white, stroke: C.violet, "stroke-width": 3 }, svg);
+const refCircle = el("circle", { cx: ref.x, cy: ref.y, fill: "none", stroke: C.violet, "stroke-width": 2.5 }, svg);
+const knnTag = el("g", {}, svg);
+el("rect", { x: focus.x - 128, y: focus.y - R10 - 54, width: 256, height: 44, rx: 22, fill: C.white, stroke: C.safranin, "stroke-width": 2.5 }, knnTag);
+txt(knnTag, focus.x, focus.y - R10 - 25, "far from every known tile", { size: 19, anchor: "middle", fill: C.safranin, weight: 700 });
+
+// discovery: one new prototype
+const newP = el("g", {}, svg);
+el("rect", { x: KX - 16, y: KY - 16, width: 32, height: 32, transform: `rotate(45 ${KX} ${KY})`, fill: C.safranin, stroke: C.white, "stroke-width": 3 }, newP);
+txt(newP, KX, KY + 58, "new class", { size: 22, anchor: "middle", weight: 700, fill: C.safranin });
+
+svg.appendChild(newP);
+
+// captions
+const cap1 = txt(svg, 30, 712, "", { size: 26, weight: 700 });
+const cap2 = txt(svg, 30, 750, "", { size: 21, fill: C.ink2 });
+const STEPS = [
+  [0, "Five known species: prototypes and training tiles", "ka is held out: leave-one-species-out"],
+  [2.4, "Tiles of the unseen species arrive", "they fall inside the hull of the known prototypes"],
+  [4.6, "Global score: rebuild the tile from known prototypes", "small residual, so it looks known (AUROC 0.07 on held-out ka)"],
+  [7.4, "Local score: distance to the 10th-nearest training tile", "far from every known tile, so it is flagged (AUROC 0.84)"],
+  [10.4, "Discovery: Sinkhorn-Knopp with K = 1", "pools the flagged tiles into one new prototype"],
+];
+
+function render(t) {
+  // captions cross-fade
+  let cur = 0;
+  STEPS.forEach((s, i) => { if (t >= s[0]) cur = i; });
+  const [t0, a, b] = STEPS[cur];
+  const next = STEPS[cur + 1] ? STEPS[cur + 1][0] : 1e9;
+  cap1.textContent = a; cap2.textContent = b;
+  const o = seg(t, t0 + 0.05, t0 + 0.45) * (1 - seg(t, next - 0.3, next));
+  show(cap1, o); show(cap2, o);
+
+  show(hull, seg(t, 0.6, 1.4));
+  train.forEach((p, k) => show(p.e, seg(t, 0.3 + p.i * 0.15, 0.8 + p.i * 0.15) * (t > 10.4 ? lerp(1, 0.7, seg(t, 10.4, 11)) : 1)));
+  protoEls.forEach((g, i) => {
+    const p = seg(t, 0.1 + i * 0.15, 0.6 + i * 0.15, ease.back);
+    show(g, Math.min(1, p * 2));
+  });
+
+  // unknown tiles fly in
+  const pk = seg(t, 2.4, 3.9);
+  const conv = seg(t, 10.6, 11.6); // pulled together for discovery
+  unk.forEach((u) => {
+    const p = seg(t, 2.4 + u.k * 0.06, 3.6 + u.k * 0.06, ease.out);
+    const x = lerp(lerp(u.sx, u.x, p), lerp(u.x, KX, 0.3), conv);
+    const y = lerp(lerp(u.sy, u.y, p), lerp(u.y, KY, 0.3), conv);
+    u.e.setAttribute("cx", x); u.e.setAttribute("cy", y);
+    u.e.setAttribute("r", u === focus && t > 4.6 && t < 10.4 ? 9 : 7);
+    show(u.e, p > 0 ? 1 : 0);
+  });
+
+  // global residual
+  const pr = seg(t, 4.8, 5.6) * (1 - seg(t, 7.0, 7.4));
+  show(recon, pr);
+  show(reconTag, seg(t, 5.6, 6.1) * (1 - seg(t, 7.0, 7.4)));
+
+  // local k-NN, with a known tile's small radius for contrast
+  const pg = seg(t, 7.6, 9.0, ease.out) * (1 - seg(t, 10.2, 10.6));
+  knn.setAttribute("r", Math.max(0.1, R10 * seg(t, 7.6, 9.0, ease.out)));
+  show(knn, pg);
+  const ang = -2.4;
+  kRay.setAttribute("x2", focus.x + R10 * seg(t, 7.6, 9.0, ease.out) * Math.cos(ang));
+  kRay.setAttribute("y2", focus.y + R10 * seg(t, 7.6, 9.0, ease.out) * Math.sin(ang));
+  show(kRay, pg);
+  show(knnTag, seg(t, 9.0, 9.4) * (1 - seg(t, 10.2, 10.6)));
+  refCircle.setAttribute("r", Math.max(0.1, rdists[9] * seg(t, 8.2, 9.0, ease.out)));
+  show(refCircle, seg(t, 8.2, 8.5) * (1 - seg(t, 10.2, 10.6)));
+  show(refDot, seg(t, 7.8, 8.2) * (1 - seg(t, 10.2, 10.6)));
+
+  // discovery
+  const pn = seg(t, 11.4, 12.0, ease.back);
+  show(newP, Math.min(1, pn * 2));
+  newP.setAttribute("transform", `translate(${KX} ${KY}) scale(${Math.max(0.01, pn)}) translate(${-KX} ${-KY})`);
+}
+window.render = render;
+ready();
+</script>
+</body></html>

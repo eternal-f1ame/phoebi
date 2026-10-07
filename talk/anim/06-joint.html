@@ -1,0 +1,141 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>06-joint</title></head>
+<body>
+<script src="lib.js"></script>
+<script src="combos.js"></script>
+<script>
+// Schematic of the diagnosis: a gradient-trained per-image head fits P(labels | mixture) on the
+// mixtures it saw, so on a new mixture it answers with a familiar one; an anchor decoder reads each
+// species on its own. Illustrative, not a measured prediction.
+const W = 864, H = 800;
+const svg = setup(W, H, 12.4, 1);
+const codes = SPECIES.map((s) => s.code);
+const TRUTH = ["bs", "ka", "pf"];
+const RECALLED = "bs_mx_ka_pf"; // a training mixture
+const defs = el("defs", {}, svg);
+
+// the unseen mixture
+const head = el("g", {}, svg);
+const cp = el("clipPath", { id: "thumb" }, defs);
+el("rect", { x: 0, y: 6, width: 168, height: 168, rx: 14 }, cp);
+el("image", { href: "img/bs_ka_pf.png", x: 0, y: 6, width: 168, height: 168, "clip-path": "url(#thumb)" }, head);
+el("rect", { x: 0, y: 6, width: 168, height: 168, rx: 14, fill: "none", stroke: C.safranin, "stroke-width": 4 }, head);
+txt(head, 200, 52, "A mixture never seen in training", { size: 28, weight: 700 });
+txt(head, 200, 96, "it contains", { size: 22, fill: C.ink2 });
+TRUTH.forEach((s, i) => {
+  const c = chip(head, 352 + i * 84, 89, 70, 40, s, { size: 21 });
+  styleChip(c, true, C.ink);
+});
+txt(head, 200, 146, "bs + ka + pf is one of the 9 held-out mixtures", { size: 19, fill: C.safranin, weight: 600 });
+
+// lane 1: per-image classifier
+const L1 = 222;
+const lane1 = el("g", {}, svg);
+el("rect", { x: 0, y: L1, width: W, height: 262, rx: 16, fill: C.surface }, lane1);
+txt(lane1, 24, L1 + 42, "Gradient-trained per-image classifier", { size: 24, weight: 700, fill: C.safranin });
+txt(lane1, 24, L1 + 72, "fits P(labels | mixture) on the 31 mixtures it saw", { size: 20, fill: C.ink2 });
+const trainCols = COMBOS.filter((c) => !c[1]).map((c) => c[0]);
+const MX = 24, MY = L1 + 100, MC = 10, MP = 12.4;
+const mem = el("g", {}, lane1);
+const memCols = trainCols.map((code, i) => {
+  const sp = code.split("_");
+  const g = el("g", {}, mem);
+  codes.forEach((s, r) => el("rect", { x: MX + i * MP, y: MY + r * MP, width: MC, height: MC, rx: 2, fill: sp.includes(s) ? C.violet : "#e9e5dc" }, g));
+  return { code, sp, g, x: MX + i * MP };
+});
+txt(lane1, MX, MY + 6 * MP + 26, "mixtures seen in training", { size: 18, fill: C.muted });
+const scan = el("rect", { y: MY - 5, width: MC + 8, height: 6 * MP + 8, rx: 4, fill: "none", stroke: C.safranin, "stroke-width": 3 }, lane1);
+const arrow1 = el("path", { d: `M${MX + 31 * MP + 22} ${L1 + 148} h70`, stroke: C.muted, "stroke-width": 3, "marker-end": "url(#ah)" }, lane1);
+const mk = el("marker", { id: "ah", viewBox: "0 0 10 10", refX: 9, refY: 5, markerWidth: 6, markerHeight: 6, orient: "auto" }, defs);
+el("path", { d: "M0 0L10 5 0 10z", fill: C.muted }, mk);
+const out1 = codes.map((s, i) => chip(lane1, 552 + (i % 3) * 100, L1 + 124 + Math.floor(i / 3) * 52, 84, 40, s, { size: 21 }));
+// a small corner badge per output chip: a tick for a right answer, a cross for a wrong one
+function badge(parent, c) {
+  const g = el("g", {}, parent);
+  const dot = el("circle", { cx: c.cx + 38, cy: c.cy - 18, r: 13, fill: C.violet, stroke: C.white, "stroke-width": 2.5 }, g);
+  const t = txt(g, c.cx + 38, c.cy - 17, "", { size: 16, anchor: "middle", baseline: "middle", weight: 800, fill: C.white });
+  return { g, dot, t };
+}
+const marks1 = out1.map((c) => badge(lane1, c));
+const verdict1 = txt(lane1, 552 - 42, L1 + 238, "answers with a mixture it has seen", { size: 21, weight: 700, fill: C.safranin });
+
+// a ghost copy of the recalled column that flies to the output
+const recalled = memCols.find((c) => c.code === RECALLED);
+const ghost = el("g", {}, lane1);
+codes.forEach((s, r) => el("rect", { x: 0, y: r * MP, width: MC, height: MC, rx: 2, fill: recalled.sp.includes(s) ? C.safranin : "none" }, ghost));
+
+// lane 2: anchor decoder
+const L2 = 508;
+const lane2 = el("g", {}, svg);
+el("rect", { x: 0, y: L2, width: W, height: 262, rx: 16, fill: C.surface }, lane2);
+txt(lane2, 24, L2 + 42, "Anchor decoder", { size: 24, weight: 700, fill: C.violet });
+txt(lane2, 24, L2 + 72, "reads each species on its own, against a fixed prototype", { size: 20, fill: C.ink2 });
+const SCORE = { bs: 0.78, bt: 0.22, fj: 0.3, ka: 0.86, mx: 0.26, pf: 0.7 }; // schematic
+const GX = 96, GW = 300, TH = 0.5;
+const gauges = codes.map((s, i) => {
+  const col = i % 2, row = Math.floor(i / 2);
+  const y = L2 + 96 + i * 24;
+  const g = el("g", {}, lane2);
+  txt(g, 24, y + 9, s, { size: 18, mono: true, weight: 700, baseline: "middle" });
+  el("path", { d: `M${64} ${y + 9} l8 -8 l8 8 l-8 8 z`, fill: "none", stroke: C.violet, "stroke-width": 2 }, g);
+  el("rect", { x: GX, y: y + 2, width: GW, height: 14, rx: 7, fill: "#e9e5dc" }, g);
+  const bar = el("rect", { x: GX, y: y + 2, height: 14, rx: 7, fill: C.grey }, g);
+  return { s, g, bar, y };
+});
+el("line", { x1: GX + GW * TH, x2: GX + GW * TH, y1: L2 + 90, y2: L2 + 96 + 6 * 24, stroke: C.safranin, "stroke-width": 2.5, "stroke-dasharray": "5 4" }, lane2);
+txt(lane2, GX + GW * TH, L2 + 254, "threshold", { size: 17, anchor: "middle", fill: C.safranin, weight: 600 });
+el("path", { d: `M${GX + GW + 34} ${L2 + 148} h70`, stroke: C.muted, "stroke-width": 3, "marker-end": "url(#ah)" }, lane2);
+const out2 = codes.map((s, i) => chip(lane2, 552 + (i % 3) * 100, L2 + 124 + Math.floor(i / 3) * 52, 84, 40, s, { size: 21 }));
+const marks2 = out2.map((c) => badge(lane2, c));
+const verdict2 = txt(lane2, 552 - 42, L2 + 238, "nothing per-mixture to overfit", { size: 21, weight: 700, fill: C.violet });
+
+const foot = txt(svg, W, H - 6, "schematic of the mechanism, not a measured prediction", { size: 16, anchor: "end", fill: C.muted, italic: true });
+
+function setMark(m, on, truth) {
+  show(m.g, on ? 1 : 0);
+  m.t.textContent = truth ? "✓" : "✗";
+  m.dot.setAttribute("fill", truth ? C.violet : C.safranin);
+}
+
+function render(t) {
+  show(head, seg(t, 0, 0.7));
+  show(lane1, seg(t, 1.0, 1.6));
+  // the scanner sweeps the remembered mixtures and settles on a familiar one
+  const target = memCols.indexOf(recalled);
+  const sweep = seg(t, 2.0, 4.2, ease.inOut);
+  const pos = sweep < 1 ? (memCols.length - 1) * Math.min(1, sweep * 1.25) : target;
+  const settle = seg(t, 3.7, 4.3);
+  const idx = lerp(pos, target, settle);
+  scan.setAttribute("x", MX + idx * MP - 4);
+  show(scan, seg(t, 1.9, 2.2));
+  memCols.forEach((c, i) => show(c.g, t > 4.3 && c !== recalled ? 0.45 : 1));
+  // the recalled column flies to the outputs
+  const fly = seg(t, 4.5, 5.4);
+  show(ghost, fly > 0 && fly < 1 ? 1 : 0);
+  ghost.setAttribute("transform", `translate(${lerp(recalled.x, 640, fly)} ${lerp(MY, MY + 10, fly)}) scale(${lerp(1, 1.6, fly)})`);
+  out1.forEach((c, i) => {
+    styleChip(c, t > 5.4 && recalled.sp.includes(codes[i]), C.ink2);
+    setMark(marks1[i], t > 6.0 + i * 0.05 && recalled.sp.includes(codes[i]), TRUTH.includes(codes[i]));
+  });
+  show(verdict1, seg(t, 6.3, 6.9));
+
+  // lane 2: the gauges fill independently
+  show(lane2, seg(t, 7.2, 7.8));
+  gauges.forEach((g, i) => {
+    const p = seg(t, 8.0 + i * 0.08, 9.4 + i * 0.08, ease.out);
+    const v = SCORE[g.s] * p;
+    g.bar.setAttribute("width", Math.max(14, GW * v));
+    g.bar.setAttribute("fill", v > TH ? C.violet : C.grey);
+  });
+  out2.forEach((c, i) => {
+    const on = SCORE[codes[i]] > TH && t > 9.8 + i * 0.06;
+    styleChip(c, on, C.violet);
+    setMark(marks2[i], on, true);
+  });
+  show(verdict2, seg(t, 10.6, 11.2));
+  show(foot, seg(t, 11.0, 11.6));
+}
+window.render = render;
+ready();
+</script>
+</body></html>

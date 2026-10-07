@@ -1,0 +1,92 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>02-species</title></head>
+<body>
+<script src="lib.js"></script>
+<script>
+// Six rod-shaped species, grouped as the paper describes them, then their cell lengths on one
+// ruler (paper Table 2): the look-alikes overlap, and the classes differ by length.
+const W = 1728, H = 640;
+const svg = setup(W, H, 9.6, 1);
+const NAMES = Object.fromEntries(SPECIES.map((s) => [s.code, s.name]));
+const GROUPS = [
+  { name: "thin straight rods", members: ["bs", "bt"] },
+  { name: "mid-length rods", members: ["fj", "mx"] },
+  { name: "short rods", members: ["pf", "ka"] },
+];
+const LEN = { bs: [4, 10], bt: [3.6, 4.4], fj: [5, 10], mx: [5, 10], pf: [1.5, 3], ka: [1, 3] };
+const LENTXT = { bs: "4–10 µm", bt: "~4 µm", fj: "5–10 µm", mx: "5–10 µm", pf: "1.5–3 µm", ka: "1–3 µm" };
+const S = 214, IN = 34, OUT = 118;
+const total = 6 * S + 3 * IN + 2 * OUT;
+const defs = el("defs", {}, svg);
+const order = GROUPS.flatMap((g) => g.members);
+
+let x = (W - total) / 2;
+const cards = [];
+GROUPS.forEach((g, gi) => {
+  const xs = [];
+  g.members.forEach((code, k) => {
+    const cp = el("clipPath", { id: `c-${code}` }, defs);
+    el("rect", { x, y: 70, width: S, height: S, rx: 18 }, cp);
+    const grp = el("g", {}, svg);
+    el("image", { href: `img/species-${code}.png`, x, y: 70, width: S, height: S, "clip-path": `url(#c-${code})`, preserveAspectRatio: "xMidYMid slice" }, grp);
+    const frame = el("rect", { x, y: 70, width: S, height: S, rx: 18, fill: "none", stroke: C.rule, "stroke-width": 2 }, grp);
+    txt(grp, x + S / 2, 322, code, { size: 26, anchor: "middle", mono: true, weight: 700 });
+    txt(grp, x + S / 2, 352, NAMES[code], { size: 19, anchor: "middle", italic: true, fill: C.ink2 });
+    cards.push({ code, grp, frame, x, gi });
+    xs.push(x);
+    x += S + (k === 0 ? IN : 0);
+  });
+  // group bracket above
+  const bg = el("g", {}, svg);
+  const xa = xs[0], xb = xs[1] + S;
+  el("path", { d: `M${xa} 52 V40 H${xb} V52`, fill: "none", stroke: C.violet, "stroke-width": 2.5 }, bg);
+  txt(bg, (xa + xb) / 2, 26, g.name, { size: 22, anchor: "middle", weight: 700, fill: C.violet });
+  g.bg = bg;
+  x += OUT;
+});
+
+// the ruler: one row per species, on a shared 0-10 um axis
+const RX0 = 420, RX1 = 1560, RY = 398, ROW = 30;
+const ux = (u) => lerp(RX0, RX1, u / 10);
+const ruler = el("g", {}, svg);
+for (let u = 0; u <= 10; u++) {
+  el("line", { x1: ux(u), x2: ux(u), y1: RY - 8, y2: RY + 6 * ROW + 4, stroke: u % 5 ? "#ece8df" : C.rule, "stroke-width": 1.5 }, ruler);
+  txt(ruler, ux(u), RY + 6 * ROW + 30, `${u}`, { size: 18, anchor: "middle", fill: C.muted });
+}
+txt(ruler, ux(10) + 18, RY + 6 * ROW + 30, "cell length, µm", { size: 18, fill: C.muted });
+const bars = order.map((code, r) => {
+  const y = RY + r * ROW;
+  const g = el("g", {}, svg);
+  txt(g, RX0 - 20, y + ROW / 2, code, { size: 20, anchor: "end", baseline: "middle", mono: true, weight: 700 });
+  const bar = el("rect", { x: ux(LEN[code][0]), y: y + 5, height: ROW - 10, rx: (ROW - 10) / 2, fill: C.violet }, g);
+  const lab = txt(g, 0, y + ROW / 2 + 1, LENTXT[code], { size: 18, baseline: "middle", fill: C.ink2 });
+  return { code, g, bar, lab };
+});
+
+function render(t) {
+  cards.forEach((c, i) => {
+    const p = seg(t, 0.2 + i * 0.28, 0.75 + i * 0.28, ease.back);
+    show(c.grp, Math.min(1, p * 2));
+    c.grp.setAttribute("transform", `translate(0 ${24 * (1 - p)})`);
+  });
+  GROUPS.forEach((g, gi) => show(g.bg, seg(t, 2.2 + gi * 0.3, 2.8 + gi * 0.3)));
+  show(ruler, seg(t, 3.4, 4.0));
+  bars.forEach((b, i) => {
+    show(b.g, seg(t, 3.6, 4.0));
+    const p = seg(t, 4.0 + i * 0.32, 4.9 + i * 0.32, ease.out);
+    const [a, z] = LEN[b.code];
+    b.bar.setAttribute("width", Math.max(0.1, (ux(z) - ux(a)) * p));
+    b.lab.setAttribute("x", ux(lerp(a, z, p)) + 12);
+    show(b.lab, seg(t, 4.5 + i * 0.32, 5.0 + i * 0.32));
+  });
+  // last: the look-alike pairs share a frame colour
+  const pk = seg(t, 7.2, 8.0);
+  cards.forEach((c) => {
+    c.frame.setAttribute("stroke", mix(C.rule, C.violet, pk));
+    c.frame.setAttribute("stroke-width", lerp(2, 4, pk));
+  });
+}
+window.render = render;
+ready();
+</script>
+</body></html>
