@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Canva__read-design",
+      "Bash(ffprobe *)"
+    ]
+  }
+}
